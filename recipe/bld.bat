@@ -1,4 +1,5 @@
 set PENDULUM_EXTENSIONS=1
+set PYO3_USE_ABI3_FORWARD_COMPATIBILITY=1
 
 maturin build -vv -j %CPU_COUNT% --release --strip --manylinux off --interpreter=%PYTHON%
 
