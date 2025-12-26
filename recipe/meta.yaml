@@ -12,9 +12,6 @@ source:
     - 0001-remove-tzdata-dep-for-pip-check.patch
 build:
   number: 3
-  # script:
-  #   - cargo-bundle-licenses --format yaml --output THIRDPARTY.yml
-  #   - {{ PYTHON }} -m pip install . -vv --no-deps --no-build-isolation
 
 requirements:
   build:
@@ -29,14 +26,13 @@ requirements:
   host:
     - python
     - maturin >=1.0,<2.0
-    #- poetry-core
     - pip
   run:
     - python
     - python-dateutil >=2.6
     # Source uses tzdata>=2020.1, python-tzdata and tzdata are available on conda-forge, python-tzdata is the correct conda package to use
     - python-tzdata >=2020.1
-    #- cffi >=1.17
+    - cffi >=1.17
 
 test:
   imports:
