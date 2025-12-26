@@ -12,9 +12,9 @@ source:
     - 0001-remove-tzdata-dep-for-pip-check.patch
 build:
   number: 3
-  script:
-    - cargo-bundle-licenses --format yaml --output THIRDPARTY.yml
-    - {{ PYTHON }} -m pip install . -vv --no-deps --no-build-isolation
+  # script:
+  #   - cargo-bundle-licenses --format yaml --output THIRDPARTY.yml
+  #   - {{ PYTHON }} -m pip install . -vv --no-deps --no-build-isolation
 
 requirements:
   build:
