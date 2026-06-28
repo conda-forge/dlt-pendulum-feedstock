@@ -1,0 +1,74 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/prefix-dev/recipe-format/main/schema.json
+schema_version: 1
+
+context:
+  version: "3.0.2"
+
+package:
+  name: dlt-pendulum
+  version: ${{ version }}
+
+source:
+  url: https://github.com/dlt-hub/pendulum/archive/refs/tags/${{ version }}.tar.gz
+  sha256: 9a0225a8e97399ad7c3930856d581093b65e36bb27c85c0da5a2575ddbaa9248
+  patches:
+    - 0001-remove-tzdata-dep-for-pip-check.patch
+
+build:
+  number: 4
+  script:
+    - if: unix
+      then: build.sh
+    - if: win
+      then: build.bat
+
+requirements:
+  build:
+    - ${{ compiler('c') }}
+    - ${{ stdlib('c') }}
+    - ${{ compiler('rust') }}
+    - cargo-bundle-licenses
+    - if: build_platform != target_platform
+      then:
+        - python
+        - cross-python_${{ target_platform }}
+        - crossenv
+        - maturin >=1.0,<2.0
+  host:
+    - python
+    - maturin >=1.0,<2.0
+    - pip
+  run:
+    - python
+    - python-dateutil >=2.6
+    - python-tzdata >=2020.1
+    - cffi >=1.17
+
+tests:
+  - python:
+      imports:
+        - pendulum
+      pip_check: true
+  - script:
+      - if: python_impl == "cpython"
+        then:
+          - python -c "from pendulum._pendulum import parse_iso8601"
+          - python -c "from pendulum._helpers import days_in_year"
+
+about:
+  homepage: https://github.com/dlt-hub/pendulum
+  repository: https://github.com/dlt-hub/pendulum
+  documentation: https://pendulum.eustace.io
+  summary: Python datetimes made easy
+  description: |
+    Pendulum is a Python library that simplifies datetime operations,
+    providing a cleaner API built on Python's standard datetime library.
+    This is a fork maintained by dlt-hub to support Python 3.9-3.13.
+  license: MIT
+  license_file:
+    - LICENSE
+    - THIRDPARTY.yml
+
+extra:
+  recipe-maintainers:
+    - rxm7706
